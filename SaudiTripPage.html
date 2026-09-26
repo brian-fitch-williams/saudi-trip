@@ -685,71 +685,233 @@
         }
         body.night-mode #map-wrapper { box-shadow: 0 18px 50px rgba(0,0,0,0.45); }
 
+        /* Mobile: fixed viewport — map + gallery always on screen; itinerary is a drawer */
+        .log-backdrop {
+            display: none;
+        }
+        .btn-itinerary {
+            display: none;
+        }
+
         @media (max-width: 980px) {
-            html, body { overflow: auto; height: auto; min-height: 100%; }
-            body { display: block; }
-            .app-shell {
-                height: auto;
-                min-height: 100dvh;
-                padding-bottom: 16px;
+            html, body {
+                height: 100%;
+                height: 100dvh;
+                overflow: hidden;
+                overscroll-behavior: none;
             }
-            .dashboard {
+            body {
                 display: flex;
                 flex-direction: column;
-                height: auto;
-                gap: 10px;
             }
-            .log-container {
-                order: 3;
-                max-height: none;
+            header {
+                padding: 8px 10px 6px;
+                padding-top: max(8px, env(safe-area-inset-top));
+            }
+            header .title-wrapper img,
+            header .title-wrapper svg,
+            header .dot-row {
+                display: none;
+            }
+            h1 { font-size: 1.05em; letter-spacing: 0.03em; }
+            p.subtitle {
+                letter-spacing: 0.14em;
+                font-size: 0.62em;
+                margin-top: 3px;
+            }
+            .app-shell {
+                flex: 1;
+                min-height: 0;
+                padding: 0 8px max(8px, env(safe-area-inset-bottom));
+                display: flex;
+                flex-direction: column;
+            }
+            .controls-wrapper {
+                padding: 6px 0;
+                gap: 6px;
+                justify-content: flex-start;
+            }
+            .btn-control {
+                padding: 8px 12px;
+                font-size: 0.72em;
+            }
+            .btn-itinerary {
+                display: inline-block;
+                margin-left: auto;
+            }
+            .btn-media.btn-tour { display: none; }
+            .btn-media:not(.btn-tour) { display: none; }
+            .ctrl-divider { display: none; }
+
+            .dashboard {
+                flex: 1;
+                min-height: 0;
+                display: grid;
+                grid-template-columns: 1fr;
+                grid-template-rows: minmax(0, 1.05fr) minmax(0, 0.95fr);
+                grid-template-areas:
+                    "map"
+                    "gallery";
+                gap: 8px;
                 height: auto;
             }
             #map-wrapper {
-                order: 1;
-                height: 42dvh;
-                min-height: 240px;
-                flex-shrink: 0;
-            }
-            .gallery-panel {
-                order: 2;
+                grid-area: map;
                 height: auto;
                 min-height: 0;
-                flex-shrink: 0;
+                box-shadow: 0 8px 18px rgba(45, 20, 25, 0.12);
             }
-            .gallery-tabs { display: none; } /* timeline drives gallery on mobile */
+            .gallery-panel {
+                grid-area: gallery;
+                height: auto;
+                min-height: 0;
+                display: flex;
+                flex-direction: column;
+            }
+            .gallery-header {
+                margin-bottom: 4px;
+                gap: 6px;
+            }
+            .gallery-header h2 {
+                font-size: 0.72em;
+                margin: 0;
+            }
+            .gallery-stop-label {
+                font-size: 0.72em;
+            }
+            .gallery-tabs { display: none; }
+            .gallery-credit { display: none; }
             .gallery-stage {
+                flex: 1;
+                min-height: 0;
+                display: grid;
                 grid-template-columns: 1fr;
+                grid-template-rows: minmax(0, 1fr) 56px;
+                gap: 6px;
                 height: auto;
             }
             .gallery-hero {
-                height: 28dvh;
-                min-height: 180px;
+                height: auto;
+                min-height: 0;
+            }
+            .gallery-caption {
+                padding: 6px 8px;
+                font-size: 0.72em;
             }
             .gallery-thumbs {
-                grid-template-columns: repeat(4, 1fr);
-                grid-auto-rows: auto;
-                max-height: 96px;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                gap: 6px;
                 overflow-x: auto;
                 overflow-y: hidden;
+                max-height: none;
+                height: 56px;
+                grid-template-columns: none;
+                grid-auto-rows: unset;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
             }
+            .gallery-thumbs::-webkit-scrollbar { display: none; }
             .gallery-thumbs button {
+                flex: 0 0 56px;
+                width: 56px;
+                height: 56px;
+                min-height: 56px;
                 aspect-ratio: 1;
-                min-height: 72px;
+            }
+
+            .log-backdrop {
+                display: block;
+                position: fixed;
+                inset: 0;
+                background: rgba(45, 20, 25, 0.45);
+                z-index: 1190;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.22s ease;
+            }
+            .log-backdrop.open {
+                opacity: 1;
+                pointer-events: auto;
+            }
+            .log-container {
+                grid-area: map; /* share a named cell so it doesn't create a third row */
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 1200;
+                width: 100%;
+                height: min(74dvh, 620px);
+                max-height: 74dvh;
+                order: unset;
+                background: var(--sand);
+                background-image:
+                    radial-gradient(ellipse at 20% 0%, rgba(191, 111, 89, 0.1), transparent 50%),
+                    radial-gradient(ellipse at 80% 100%, rgba(45, 20, 25, 0.06), transparent 45%);
+                border-top: 3px solid var(--clay);
+                border-radius: 18px 18px 0 0;
+                box-shadow: 0 -16px 48px rgba(45, 20, 25, 0.28);
+                padding: 10px 14px max(18px, env(safe-area-inset-bottom));
+                transform: translateY(110%);
+                transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .log-container.open {
+                transform: translateY(0);
+            }
+            .log-container::before {
+                content: '';
+                display: block;
+                width: 40px;
+                height: 4px;
+                border-radius: 2px;
+                background: rgba(45, 20, 25, 0.22);
+                margin: 2px auto 10px;
+            }
+            .log-drawer-close {
+                display: block;
+                position: sticky;
+                top: 0;
+                float: right;
+                z-index: 2;
+                background: var(--ink);
+                color: var(--sand);
+                border: none;
+                width: 36px;
+                height: 36px;
+                font-size: 1.35em;
+                line-height: 1;
+                cursor: pointer;
+                margin: -4px 0 8px 8px;
             }
             .todo-grid { grid-template-columns: 1fr 1fr; }
-            header { padding: 12px 12px 10px; }
-            h1 { font-size: 1.15em; }
-            p.subtitle { letter-spacing: 0.16em; font-size: 0.7em; }
-            .btn-media.btn-tour { display: inline-flex; } /* keep tour link visible on phones */
-            .btn-media:not(.btn-tour) { display: none; }
         }
 
         @media (max-width: 560px) {
             .todo-grid { grid-template-columns: 1fr; }
-            .gallery-thumbs { grid-template-columns: repeat(3, 1fr); }
-            #map-wrapper { height: 38dvh; min-height: 200px; }
-            .gallery-hero { height: 24dvh; min-height: 160px; }
-            .btn-control { padding: 8px 12px; font-size: 0.72em; }
+            .dashboard {
+                grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+                gap: 6px;
+            }
+            .gallery-stage {
+                grid-template-rows: minmax(0, 1fr) 48px;
+                gap: 4px;
+            }
+            .gallery-thumbs { height: 48px; }
+            .gallery-thumbs button {
+                flex-basis: 48px;
+                width: 48px;
+                height: 48px;
+                min-height: 48px;
+            }
+            .btn-control { padding: 7px 10px; font-size: 0.68em; }
+        }
+
+        @media (min-width: 981px) {
+            .log-drawer-close { display: none; }
         }
     </style>
 </head>
@@ -780,10 +942,14 @@
         <a href="https://www.ihg.com/intercontinental/hotels/us/en/jeddah/jedha/hoteldetail" target="_blank" class="btn-control btn-media">Jeddah InterContinental</a>
         <a href="https://dartantora.co/" target="_blank" class="btn-control btn-media">Dar Tantora</a>
         <a href="https://www.travelingsocotra.com/tour/best-of-socotra-tour/" target="_blank" class="btn-control btn-media btn-tour">Best of Socotra Tour</a>
+        <button type="button" id="itineraryBtn" class="btn-control btn-itinerary" onclick="toggleItinerary()" aria-expanded="false" aria-controls="trip-log">Itinerary</button>
     </div>
 
+    <div class="log-backdrop" id="logBackdrop" onclick="closeItinerary()" aria-hidden="true"></div>
+
     <div class="dashboard">
-        <div class="log-container">
+        <div class="log-container" id="trip-log">
+            <button type="button" class="log-drawer-close" onclick="closeItinerary()" aria-label="Close itinerary">×</button>
             <h2>Itinerary &amp; Notes</h2>
 
             <div class="log-entry" id="log-bos" onclick="jumpTo('log-bos')">
@@ -1123,6 +1289,47 @@
         // Map sits in a flex/grid cell — fix tile sizing after layout
         setTimeout(() => map.invalidateSize(), 100);
         window.addEventListener('resize', () => map.invalidateSize());
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', () => map.invalidateSize());
+        }
+
+        function isMobileLayout() {
+            return window.matchMedia('(max-width: 980px)').matches;
+        }
+        function openItinerary() {
+            document.getElementById('trip-log').classList.add('open');
+            document.getElementById('logBackdrop').classList.add('open');
+            const btn = document.getElementById('itineraryBtn');
+            if (btn) {
+                btn.setAttribute('aria-expanded', 'true');
+                btn.classList.add('active');
+            }
+        }
+        function closeItinerary() {
+            document.getElementById('trip-log').classList.remove('open');
+            document.getElementById('logBackdrop').classList.remove('open');
+            const btn = document.getElementById('itineraryBtn');
+            if (btn) {
+                btn.setAttribute('aria-expanded', 'false');
+                btn.classList.remove('active');
+            }
+        }
+        function toggleItinerary() {
+            if (document.getElementById('trip-log').classList.contains('open')) closeItinerary();
+            else openItinerary();
+        }
+        window.openItinerary = openItinerary;
+        window.closeItinerary = closeItinerary;
+        window.toggleItinerary = toggleItinerary;
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('trip-log').classList.contains('open')) {
+                closeItinerary();
+            }
+        });
+        window.addEventListener('resize', () => {
+            if (!isMobileLayout()) closeItinerary();
+            setTimeout(() => map.invalidateSize(), 50);
+        });
 
         /* ---- Stop galleries ---- */
         const ASSET_BASE = (() => {
@@ -1430,7 +1637,12 @@
             const logEl = document.getElementById(id);
             if (logEl) {
                 logEl.classList.add('active');
-                logEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                const drawer = document.getElementById('trip-log');
+                if (drawer && drawer.classList.contains('open')) {
+                    logEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else if (!isMobileLayout()) {
+                    logEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
             }
         }
 
@@ -1703,6 +1915,7 @@
             isPaused = true;
             updateBtnState();
             hideAllOverlays();
+            if (isMobileLayout()) closeItinerary();
 
             const targetIdx = itinerary.findIndex(leg => leg.id === id);
             if (targetIdx === -1) return;
@@ -1725,6 +1938,7 @@
             markArrived(targetLeg.id);
             if (targetLeg.name && markers[targetLeg.name]) markers[targetLeg.name].openPopup();
             if (targetLeg.fx) playFx(targetLeg.fx);
+            setTimeout(() => map.invalidateSize(), 100);
         };
 
         // Initial state
