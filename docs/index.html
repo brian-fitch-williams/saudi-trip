@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#D9D6D3">
     <title>Socotra &amp; Saudi Arabia · Voyage Log</title>
+    <script>
+        // GitHub Pages project sites break relative assets without a trailing slash
+        (function () {
+            var path = location.pathname;
+            if (location.protocol !== 'file:' && !path.endsWith('/') && !/\.html?$/i.test(path)) {
+                location.replace(path + '/' + location.search + location.hash);
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
@@ -630,7 +639,8 @@
             header { padding: 12px 12px 10px; }
             h1 { font-size: 1.15em; }
             p.subtitle { letter-spacing: 0.16em; font-size: 0.7em; }
-            .btn-media { display: none; } /* keep primary controls on small screens */
+            .btn-media.btn-tour { display: inline-flex; } /* keep tour link visible on phones */
+            .btn-media:not(.btn-tour) { display: none; }
         }
 
         @media (max-width: 560px) {
@@ -668,6 +678,7 @@
         <span class="ctrl-divider" style="border-left: 1px solid rgba(45,20,25,0.2); height: 28px; margin: 0 6px;"></span>
         <a href="https://www.ihg.com/intercontinental/hotels/us/en/jeddah/jedha/hoteldetail" target="_blank" class="btn-control btn-media">Jeddah InterContinental</a>
         <a href="https://dartantora.co/" target="_blank" class="btn-control btn-media">Dar Tantora</a>
+        <a href="https://www.travelingsocotra.com/tour/best-of-socotra-tour/" target="_blank" class="btn-control btn-media btn-tour">Best of Socotra Tour</a>
     </div>
 
     <div class="dashboard">
@@ -715,8 +726,8 @@
                         <b class="typewriter">Dragon's blood island.</b>
                         <div class="quill-container"><svg class="quill-pen" viewBox="0 0 24 24" fill="#f3f0eb" stroke="#8a8178" stroke-width="1" width="28" height="28"><path d="M20.24 3.76a2.6 2.6 0 0 0-3.68 0 14.88 14.88 0 0 0-3.32 5.6 14.88 14.88 0 0 0-1.8 4.6A4.5 4.5 0 0 0 10 16.5L3 21l3-1.5 1-1.5a4.5 4.5 0 0 0 2.5 1.5 14.88 14.88 0 0 0 4.6-1.8 14.88 14.88 0 0 0 5.6-3.32 2.6 2.6 0 0 0 0-3.68z"></path></svg></div>
                     </div>
-                    <p>IY525 JED→SCT Dec 24 11:00–14:00. A week among bottle trees, lagoon beaches, and the Indian Ocean. Return IY526 SCT→JED Dec 31 15:00–19:00 — New Year's Eve back in Jeddah.</p>
-                    <div class="meta">TODO: confirm Socotra flight tickets</div>
+                    <p>IY525 JED→SCT Dec 24 11:00–14:00. Best of Socotra tour with Traveling Socotra — dragon trees, Arher dunes, Homhil, White Canyon, Fermhin forest, and private camps under the stars. Return IY526 SCT→JED Dec 31 15:00–19:00.</p>
+                    <div class="meta"><a href="https://www.travelingsocotra.com/tour/best-of-socotra-tour/" target="_blank" rel="noopener">travelingsocotra.com · Best of Socotra</a></div>
                 </div>
             </div>
 
@@ -981,7 +992,7 @@
                 </div>
                 <div class="gallery-thumbs" id="galleryThumbs"></div>
             </div>
-            <p class="gallery-credit">Landmark photos · Wikimedia Commons · replace with your trip shots later</p>
+            <p class="gallery-credit">Socotra photos from <a href="https://www.travelingsocotra.com/tour/best-of-socotra-tour/" target="_blank" rel="noopener">Traveling Socotra · Best of Socotra</a> · other landmarks via Wikimedia Commons</p>
         </section>
     </div>
     </div><!-- /.app-shell -->
@@ -998,7 +1009,15 @@
         setTimeout(() => map.invalidateSize(), 100);
         window.addEventListener('resize', () => map.invalidateSize());
 
-        /* ---- Stop galleries (local Wikimedia Commons downloads) ---- */
+        /* ---- Stop galleries ---- */
+        const ASSET_BASE = (() => {
+            if (location.protocol === 'file:') return '';
+            // Project Pages live under /saudi-trip/
+            if (location.pathname.indexOf('/saudi-trip') === 0) return '/saudi-trip/';
+            return './';
+        })();
+        function asset(path) { return ASSET_BASE + path.replace(/^\//, ''); }
+
         const GALLERIES = {
             'log-bos': {
                 label: 'Boston → Abu Dhabi',
@@ -1022,12 +1041,21 @@
             'log-socotra': {
                 label: 'Socotra Expedition',
                 photos: [
-                    { src: 'gallery/socotra/dragon.jpg', caption: 'Dragon blood tree', place: 'Socotra' },
-                    { src: 'gallery/socotra/dragon-grove.jpg', caption: 'Dragon blood grove · Diksam', place: 'Socotra' },
-                    { src: 'gallery/socotra/firmihin.jpg', caption: 'Firmihin forest', place: 'Socotra' },
-                    { src: 'gallery/socotra/beach.jpg', caption: 'Detwah Lagoon', place: 'Socotra' },
-                    { src: 'gallery/socotra/shoab.jpg', caption: 'Qalansiya beach', place: 'Socotra' },
-                    { src: 'gallery/socotra/homhil.jpg', caption: 'Homhil Plateau pool', place: 'Socotra' }
+                    { src: 'gallery/socotra/tour/dragon-blood.jpg', caption: 'Dragon blood tree', place: 'Best of Socotra tour' },
+                    { src: 'gallery/socotra/tour/dragon-forest.jpg', caption: 'Fermhin dragon blood forest', place: 'Dixam / Fermhin' },
+                    { src: 'gallery/socotra/tour/dragon-canyon.jpg', caption: 'Dragon trees in the canyon', place: 'Socotra' },
+                    { src: 'gallery/socotra/tour/arher-dunes.jpg', caption: 'Arher dunes meet the sea', place: 'Arher' },
+                    { src: 'gallery/socotra/tour/sandboard.jpg', caption: 'Sandboarding the white dunes', place: 'Arher' },
+                    { src: 'gallery/socotra/tour/detwah.jpg', caption: 'Detwah Lagoon from above', place: 'Qalansiya' },
+                    { src: 'gallery/socotra/tour/blue-lagoon.jpg', caption: 'Blue lagoon', place: 'Socotra' },
+                    { src: 'gallery/socotra/tour/homhil.jpg', caption: 'Homhil infinity pool', place: 'Homhil' },
+                    { src: 'gallery/socotra/tour/white-canyon.jpg', caption: 'Kaleesan · White Canyon', place: 'Socotra' },
+                    { src: 'gallery/socotra/tour/zahek.jpg', caption: 'Zahek desert dunes', place: 'Zahek' },
+                    { src: 'gallery/socotra/tour/bottle-tree.jpg', caption: 'Bottle trees', place: 'Socotra' },
+                    { src: 'gallery/socotra/tour/shoab-boat.jpg', caption: 'Boat day · Shoab', place: 'Shoab' },
+                    { src: 'gallery/socotra/tour/snorkeling.jpg', caption: 'Snorkeling at Dihamri', place: 'Dihamri' },
+                    { src: 'gallery/socotra/tour/fermhin-camp.jpg', caption: 'Private camp in Fermhin forest', place: 'Traveling Socotra' },
+                    { src: 'gallery/socotra/tour/camp-stars.jpg', caption: 'Camping under the stars', place: 'Erisel camp' }
                 ]
             },
             'log-nye': {
@@ -1129,7 +1157,7 @@
             const hero = document.getElementById('galleryHero');
             hero.classList.add('swap');
             setTimeout(() => {
-                hero.src = photo.src;
+                hero.src = asset(photo.src);
                 hero.alt = photo.caption;
                 document.getElementById('galleryCaption').textContent = photo.caption;
                 document.getElementById('galleryPlace').textContent = photo.place;
@@ -1142,7 +1170,7 @@
                 const b = document.createElement('button');
                 b.type = 'button';
                 b.className = i === photoIdx ? 'active' : '';
-                b.innerHTML = `<img src="${p.src}" alt="${p.caption}">`;
+                b.innerHTML = `<img src="${asset(p.src)}" alt="${p.caption}">`;
                 b.onclick = () => showGallery(stopId, i);
                 thumbs.appendChild(b);
             });
