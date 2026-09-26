@@ -286,21 +286,22 @@
         }
         .gallery-hero {
             position: relative;
-            background: var(--ink);
+            background: #1a0f12;
             overflow: hidden;
             min-height: 0;
             height: 100%;
+            cursor: zoom-in;
         }
         .gallery-hero img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            object-position: center;
             display: block;
-            transition: opacity 0.35s ease, transform 0.6s ease;
+            transition: opacity 0.35s ease;
         }
         .gallery-hero img.swap {
             opacity: 0;
-            transform: scale(1.04);
         }
         .gallery-caption {
             position: absolute;
@@ -310,6 +311,7 @@
             color: var(--sand);
             font-size: 0.85em;
             letter-spacing: 0.04em;
+            pointer-events: none;
         }
         .gallery-caption small {
             display: block;
@@ -365,6 +367,105 @@
             color: var(--stone);
             letter-spacing: 0.04em;
             flex-shrink: 0;
+        }
+        .gallery-credit a { color: var(--clay); }
+
+        /* Fullscreen lightbox */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: rgba(20, 10, 12, 0.94);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            backdrop-filter: blur(6px);
+        }
+        .lightbox.open { display: flex; }
+        .lightbox-inner {
+            position: relative;
+            width: min(1100px, 96vw);
+            height: min(88vh, 900px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .lightbox-img {
+            max-width: 100%;
+            max-height: calc(88vh - 72px);
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+        }
+        .lightbox-meta {
+            margin-top: 14px;
+            text-align: center;
+            color: var(--sand);
+            font-size: 0.9em;
+            letter-spacing: 0.06em;
+        }
+        .lightbox-meta small {
+            display: block;
+            margin-top: 4px;
+            color: rgba(217,214,211,0.65);
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+        }
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            border: 1px solid rgba(217,214,211,0.35);
+            background: rgba(45,20,25,0.55);
+            color: var(--sand);
+            font-size: 1.6em;
+            line-height: 1;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+        .lightbox-nav:hover {
+            background: var(--clay);
+            border-color: var(--clay);
+        }
+        .lightbox-prev { left: -8px; }
+        .lightbox-next { right: -8px; }
+        .lightbox-close {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 40px;
+            height: 40px;
+            border: 0;
+            background: transparent;
+            color: var(--sand);
+            font-size: 1.6em;
+            cursor: pointer;
+            font-family: inherit;
+            opacity: 0.8;
+        }
+        .lightbox-close:hover { opacity: 1; color: var(--ember); }
+        .lightbox-counter {
+            position: absolute;
+            top: -6px;
+            left: 0;
+            color: rgba(217,214,211,0.7);
+            font-size: 0.75em;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+        @media (max-width: 700px) {
+            .lightbox { padding: 12px; }
+            .lightbox-nav { width: 40px; height: 40px; font-size: 1.3em; }
+            .lightbox-prev { left: 0; }
+            .lightbox-next { right: 0; }
+            .lightbox-img { max-height: calc(80vh - 80px); }
         }
 
         .log-entry {
@@ -992,10 +1093,24 @@
                 </div>
                 <div class="gallery-thumbs" id="galleryThumbs"></div>
             </div>
-            <p class="gallery-credit">Socotra photos from <a href="https://www.travelingsocotra.com/tour/best-of-socotra-tour/" target="_blank" rel="noopener">Traveling Socotra · Best of Socotra</a> · other landmarks via Wikimedia Commons</p>
+            <p class="gallery-credit">Socotra photos from <a href="https://www.travelingsocotra.com/tour/best-of-socotra-tour/" target="_blank" rel="noopener">Traveling Socotra · Best of Socotra</a> · AlUla hotel photos from <a href="https://dartantora.co/" target="_blank" rel="noopener">Dar Tantora</a> · click any image to enlarge</p>
         </section>
     </div>
     </div><!-- /.app-shell -->
+
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo gallery">
+        <div class="lightbox-inner">
+            <span class="lightbox-counter" id="lbCounter"></span>
+            <button type="button" class="lightbox-close" id="lbClose" aria-label="Close">×</button>
+            <button type="button" class="lightbox-nav lightbox-prev" id="lbPrev" aria-label="Previous">‹</button>
+            <img class="lightbox-img" id="lbImg" src="" alt="">
+            <button type="button" class="lightbox-nav lightbox-next" id="lbNext" aria-label="Next">›</button>
+            <div class="lightbox-meta">
+                <span id="lbCaption"></span>
+                <small id="lbPlace"></small>
+            </div>
+        </div>
+    </div>
 
     <script>
         const map = L.map('map', { zoomControl: false, preferCanvas: true }).setView([42.365, -71.010], 3);
@@ -1098,15 +1213,27 @@
             'log-alula': {
                 label: 'AlUla · Dar Tantora',
                 photos: [
-                    { src: 'gallery/alula/hegra-qasr.jpg', caption: 'Qasr al-Farid · the Lonely Castle', place: 'Hegra' },
+                    { src: 'gallery/alula/night/hegra-night-lit.jpg', caption: 'Hegra tombs lit at night', place: 'Hegra' },
+                    { src: 'gallery/alula/night/qasr-farid-night-lit.jpg', caption: 'Qasr al-Farid illuminated', place: 'Hegra' },
+                    { src: 'gallery/alula/night/qasr-farid-evening.jpg', caption: 'Qasr al-Farid at golden hour', place: 'Hegra' },
+                    { src: 'gallery/alula/night/qasr-farid-lit.jpg', caption: 'Qasr al-Farid · Lonely Castle', place: 'Hegra' },
+                    { src: 'gallery/alula/hegra-qasr.jpg', caption: 'Qasr al-Farid façade', place: 'Hegra' },
                     { src: 'gallery/alula/hegra-row.jpg', caption: 'Qasr al-Bint tombs', place: 'Hegra' },
-                    { src: 'gallery/alula/hegra.jpg', caption: 'Hegra UNESCO façades', place: "Mada'in Salih" },
-                    { src: 'gallery/alula/hegra2.jpg', caption: 'Nabataean tomb detail', place: 'Hegra' },
+                    { src: 'gallery/alula/ruins/hegra-tomb.jpg', caption: 'Hegra UNESCO tomb', place: "Mada'in Salih" },
+                    { src: 'gallery/alula/hegra.jpg', caption: 'Hegra façades', place: 'Hegra' },
+                    { src: 'gallery/alula/ruins/dadan.jpg', caption: 'Dadan ruins', place: 'AlUla' },
+                    { src: 'gallery/alula/ruins/ikmah.jpg', caption: 'Jabal Ikmah inscriptions', place: 'AlUla' },
+                    { src: 'gallery/alula/ruins/ikmah2.jpg', caption: 'Jabal Ikmah ritual site', place: 'AlUla' },
                     { src: 'gallery/alula/elephant-sunset.jpg', caption: 'Elephant Rock', place: 'AlUla' },
-                    { src: 'gallery/alula/elephant.jpg', caption: 'Jabal AlFil', place: 'AlUla' },
                     { src: 'gallery/alula/oldtown.jpg', caption: 'AlUla Old Town', place: 'Dar Tantora area' },
-                    { src: 'gallery/alula/rock.jpg', caption: 'Oasis sandstone landscape', place: 'AlUla' },
-                    { src: 'gallery/alula/maraya.jpg', caption: 'AlUla contemporary landscape', place: 'AlUla' }
+                    { src: 'gallery/alula/hotel/dar1.jpg', caption: 'Dar Tantora · Old Town stay', place: 'Dar Tantora' },
+                    { src: 'gallery/alula/hotel/dar2.jpg', caption: 'Dar Tantora interiors', place: 'Dar Tantora' },
+                    { src: 'gallery/alula/hotel/dar3.jpg', caption: 'Dar Tantora · candlelit Dar', place: 'Dar Tantora' },
+                    { src: 'gallery/alula/hotel/dar4.jpg', caption: 'Dar Tantora heritage rooms', place: 'Dar Tantora' },
+                    { src: 'gallery/alula/hotel/dar5.jpg', caption: 'Dar Tantora details', place: 'Dar Tantora' },
+                    { src: 'gallery/alula/hotel/dar6.jpg', caption: 'Dar Tantora atmosphere', place: 'Dar Tantora' },
+                    { src: 'gallery/alula/hotel/heritage1.jpg', caption: 'History & heritage', place: 'Dar Tantora' },
+                    { src: 'gallery/alula/hotel/heritage2.jpg', caption: 'Mudbrick village lanes', place: 'Dar Tantora' }
                 ]
             },
             'log-ulh': {
@@ -1144,7 +1271,7 @@
             });
         }
 
-        function showGallery(stopId, photoIdx = 0) {
+        function showGallery(stopId, photoIdx = 0, openLb = false) {
             if (!GALLERIES[stopId]) return;
             galleryStopId = stopId;
             galleryPhotoIdx = photoIdx;
@@ -1171,10 +1298,56 @@
                 b.type = 'button';
                 b.className = i === photoIdx ? 'active' : '';
                 b.innerHTML = `<img src="${asset(p.src)}" alt="${p.caption}">`;
-                b.onclick = () => showGallery(stopId, i);
+                b.onclick = () => {
+                    showGallery(stopId, i);
+                    openLightbox(stopId, i);
+                };
                 thumbs.appendChild(b);
             });
+            if (openLb) openLightbox(stopId, photoIdx);
         }
+
+        function openLightbox(stopId, photoIdx) {
+            if (!GALLERIES[stopId]) return;
+            galleryStopId = stopId;
+            galleryPhotoIdx = photoIdx;
+            document.getElementById('lightbox').classList.add('open');
+            renderLightbox();
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('open');
+        }
+        function renderLightbox() {
+            const g = GALLERIES[galleryStopId];
+            if (!g) return;
+            const photo = g.photos[galleryPhotoIdx];
+            document.getElementById('lbImg').src = asset(photo.src);
+            document.getElementById('lbImg').alt = photo.caption;
+            document.getElementById('lbCaption').textContent = photo.caption;
+            document.getElementById('lbPlace').textContent = photo.place;
+            document.getElementById('lbCounter').textContent = `${galleryPhotoIdx + 1} / ${g.photos.length}`;
+        }
+        function lightboxStep(dir) {
+            const g = GALLERIES[galleryStopId];
+            if (!g) return;
+            galleryPhotoIdx = (galleryPhotoIdx + dir + g.photos.length) % g.photos.length;
+            renderLightbox();
+            showGallery(galleryStopId, galleryPhotoIdx);
+        }
+
+        document.getElementById('galleryHero').addEventListener('click', () => openLightbox(galleryStopId, galleryPhotoIdx));
+        document.getElementById('lbClose').addEventListener('click', closeLightbox);
+        document.getElementById('lbPrev').addEventListener('click', (e) => { e.stopPropagation(); lightboxStep(-1); });
+        document.getElementById('lbNext').addEventListener('click', (e) => { e.stopPropagation(); lightboxStep(1); });
+        document.getElementById('lightbox').addEventListener('click', (e) => {
+            if (e.target.id === 'lightbox') closeLightbox();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (!document.getElementById('lightbox').classList.contains('open')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') lightboxStep(-1);
+            if (e.key === 'ArrowRight') lightboxStep(1);
+        });
 
         renderGalleryTabs();
         showGallery('log-bos', 0);
