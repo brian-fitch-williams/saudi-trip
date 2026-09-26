@@ -1093,7 +1093,7 @@
                 </div>
                 <div class="gallery-thumbs" id="galleryThumbs"></div>
             </div>
-            <p class="gallery-credit">Socotra photos from <a href="https://www.travelingsocotra.com/tour/best-of-socotra-tour/" target="_blank" rel="noopener">Traveling Socotra · Best of Socotra</a> · AlUla hotel photos from <a href="https://dartantora.co/" target="_blank" rel="noopener">Dar Tantora</a> · click any image to enlarge</p>
+            <p class="gallery-credit">Jeddah photos from <a href="https://www.visitsaudi.com/en/jeddah" target="_blank" rel="noopener">Visit Saudi</a> · Socotra from <a href="https://www.travelingsocotra.com/tour/best-of-socotra-tour/" target="_blank" rel="noopener">Traveling Socotra</a> · AlUla hotel from <a href="https://dartantora.co/" target="_blank" rel="noopener">Dar Tantora</a> · click any image to enlarge</p>
         </section>
     </div>
     </div><!-- /.app-shell -->
@@ -1135,22 +1135,26 @@
 
         const GALLERIES = {
             'log-bos': {
-                label: 'Boston → Abu Dhabi',
+                label: 'Boston Departure',
                 photos: [
                     { src: 'gallery/bos/skyline-dusk.jpg', caption: 'Boston / Cambridge skyline', place: 'Home base' },
-                    { src: 'gallery/home/boston.jpg', caption: 'Harbor skyline panorama', place: 'Boston' },
-                    { src: 'gallery/auh/zayed.jpg', caption: 'Zayed International layover', place: 'Abu Dhabi' }
+                    { src: 'gallery/home/boston.jpg', caption: 'Harbor skyline panorama', place: 'Boston' }
                 ]
             },
-            'log-auh': {
-                label: 'Abu Dhabi → Jeddah',
+            'log-nye': {
+                label: 'Jeddah',
                 photos: [
-                    { src: 'gallery/auh/zayed.jpg', caption: 'Connecting through Abu Dhabi', place: 'AUH' },
-                    { src: 'gallery/jeddah/albalad-houses.jpg', caption: 'Al-Balad coral houses', place: 'Old Jeddah' },
-                    { src: 'gallery/jeddah/rosahn.jpg', caption: 'Historic Al-Balad façades', place: 'Jeddah' },
-                    { src: 'gallery/jeddah/albalad-street.jpg', caption: 'Historic Al-Balad lanes', place: 'Jeddah' },
-                    { src: 'gallery/jeddah/corniche.jpg', caption: 'First look at the Corniche', place: 'Jeddah' },
-                    { src: 'gallery/jeddah/corniche-night.jpg', caption: 'Jeddah seafront at night', place: 'Red Sea' }
+                    { src: 'gallery/jeddah/pro/city-hero.jpg', caption: 'Jeddah · Red Sea coast', place: 'Visit Saudi' },
+                    { src: 'gallery/jeddah/pro/albalad.jpg', caption: 'Historic Al-Balad souq', place: 'UNESCO Old Jeddah' },
+                    { src: 'gallery/jeddah/pro/albalad-houses.jpg', caption: 'Rawashin · coral-stone houses', place: 'Al-Balad' },
+                    { src: 'gallery/jeddah/pro/mashrabiya.jpg', caption: 'Turquoise mashrabiya alley', place: 'Historic Jeddah' },
+                    { src: 'gallery/jeddah/pro/green-roshan.jpg', caption: 'Green rawashin façade', place: 'Al-Balad' },
+                    { src: 'gallery/jeddah/pro/old-lane.jpg', caption: 'Traditional Hijazi house', place: 'Old Jeddah' },
+                    { src: 'gallery/jeddah/pro/old-jeddah-lane.jpg', caption: 'Bab Makkah gate', place: 'Historic Jeddah' },
+                    { src: 'gallery/jeddah/pro/yacht.jpg', caption: 'Jeddah Yacht Club at dusk', place: 'Corniche' },
+                    { src: 'gallery/jeddah/pro/redsea.jpg', caption: 'Speedboat on the Red Sea', place: 'Visit Saudi' },
+                    { src: 'gallery/jeddah/pro/water-banner.jpg', caption: 'Snorkeling the Red Sea reef', place: 'Jeddah' },
+                    { src: 'gallery/jeddah/pro/fountain-pro.jpg', caption: "King Fahd's Fountain at night", place: 'Corniche' }
                 ]
             },
             'log-socotra': {
@@ -1160,7 +1164,6 @@
                     { src: 'gallery/socotra/tour/dragon-forest.jpg', caption: 'Fermhin dragon blood forest', place: 'Dixam / Fermhin' },
                     { src: 'gallery/socotra/tour/dragon-canyon.jpg', caption: 'Dragon trees in the canyon', place: 'Socotra' },
                     { src: 'gallery/socotra/tour/arher-dunes.jpg', caption: 'Arher dunes meet the sea', place: 'Arher' },
-                    { src: 'gallery/socotra/tour/sandboard.jpg', caption: 'Sandboarding the white dunes', place: 'Arher' },
                     { src: 'gallery/socotra/tour/detwah.jpg', caption: 'Detwah Lagoon from above', place: 'Qalansiya' },
                     { src: 'gallery/socotra/tour/blue-lagoon.jpg', caption: 'Blue lagoon', place: 'Socotra' },
                     { src: 'gallery/socotra/tour/homhil.jpg', caption: 'Homhil infinity pool', place: 'Homhil' },
@@ -1173,25 +1176,11 @@
                     { src: 'gallery/socotra/tour/camp-stars.jpg', caption: 'Camping under the stars', place: 'Erisel camp' }
                 ]
             },
-            'log-nye': {
-                label: 'Jeddah Recompression',
-                photos: [
-                    { src: 'gallery/jeddah/albalad-houses.jpg', caption: 'Old Jeddah coral houses', place: 'Al-Balad' },
-                    { src: 'gallery/jeddah/rosahn.jpg', caption: 'Historic Jeddah · UNESCO Al-Balad', place: 'Al-Balad' },
-                    { src: 'gallery/jeddah/albalad-street.jpg', caption: 'Bait Al Balad streets', place: 'Al-Balad' },
-                    { src: 'gallery/jeddah/albalad.jpg', caption: 'Al-Balad historic district', place: 'Old Jeddah' },
-                    { src: 'gallery/jeddah/fountain-night.jpg', caption: "King Fahd's Fountain at midnight", place: 'Jeddah' },
-                    { src: 'gallery/nye/fountain.jpg', caption: "King Fahd's Fountain", place: 'Jeddah' },
-                    { src: 'gallery/jeddah/corniche-night.jpg', caption: 'Corniche nights', place: 'Jeddah' },
-                    { src: 'gallery/jeddah/corniche.jpg', caption: 'Seafront walk', place: 'Jeddah' }
-                ]
-            },
             'log-train': {
                 label: 'Haramain Bullet Train',
                 photos: [
                     { src: 'gallery/train/haramain-train.jpg', caption: 'Haramain high-speed train', place: 'Haramain' },
                     { src: 'gallery/train/haramain.jpg', caption: 'Saudi Railways rolling stock', place: 'Haramain' },
-                    { src: 'gallery/jeddah/albalad-houses.jpg', caption: 'Leaving Old Jeddah', place: 'Jeddah' },
                     { src: 'gallery/medina/nabawi-dusk.jpg', caption: 'Medina ahead at dusk', place: 'Madinah' }
                 ]
             },
@@ -1211,49 +1200,43 @@
                 ]
             },
             'log-alula': {
-                label: 'AlUla · Dar Tantora',
+                label: 'AlUla',
                 photos: [
                     { src: 'gallery/alula/night/hegra-night-lit.jpg', caption: 'Hegra tombs lit at night', place: 'Hegra' },
                     { src: 'gallery/alula/night/qasr-farid-night-lit.jpg', caption: 'Qasr al-Farid illuminated', place: 'Hegra' },
-                    { src: 'gallery/alula/night/qasr-farid-evening.jpg', caption: 'Qasr al-Farid at golden hour', place: 'Hegra' },
-                    { src: 'gallery/alula/night/qasr-farid-lit.jpg', caption: 'Qasr al-Farid · Lonely Castle', place: 'Hegra' },
-                    { src: 'gallery/alula/hegra-qasr.jpg', caption: 'Qasr al-Farid façade', place: 'Hegra' },
                     { src: 'gallery/alula/hegra-row.jpg', caption: 'Qasr al-Bint tombs', place: 'Hegra' },
                     { src: 'gallery/alula/ruins/hegra-tomb.jpg', caption: 'Hegra UNESCO tomb', place: "Mada'in Salih" },
-                    { src: 'gallery/alula/hegra.jpg', caption: 'Hegra façades', place: 'Hegra' },
                     { src: 'gallery/alula/ruins/dadan.jpg', caption: 'Dadan ruins', place: 'AlUla' },
                     { src: 'gallery/alula/ruins/ikmah.jpg', caption: 'Jabal Ikmah inscriptions', place: 'AlUla' },
-                    { src: 'gallery/alula/ruins/ikmah2.jpg', caption: 'Jabal Ikmah ritual site', place: 'AlUla' },
                     { src: 'gallery/alula/elephant-sunset.jpg', caption: 'Elephant Rock', place: 'AlUla' },
                     { src: 'gallery/alula/oldtown.jpg', caption: 'AlUla Old Town', place: 'Dar Tantora area' },
                     { src: 'gallery/alula/hotel/dar1.jpg', caption: 'Dar Tantora · Old Town stay', place: 'Dar Tantora' },
-                    { src: 'gallery/alula/hotel/dar2.jpg', caption: 'Dar Tantora interiors', place: 'Dar Tantora' },
                     { src: 'gallery/alula/hotel/dar3.jpg', caption: 'Dar Tantora · candlelit Dar', place: 'Dar Tantora' },
-                    { src: 'gallery/alula/hotel/dar4.jpg', caption: 'Dar Tantora heritage rooms', place: 'Dar Tantora' },
-                    { src: 'gallery/alula/hotel/dar5.jpg', caption: 'Dar Tantora details', place: 'Dar Tantora' },
-                    { src: 'gallery/alula/hotel/dar6.jpg', caption: 'Dar Tantora atmosphere', place: 'Dar Tantora' },
-                    { src: 'gallery/alula/hotel/heritage1.jpg', caption: 'History & heritage', place: 'Dar Tantora' },
-                    { src: 'gallery/alula/hotel/heritage2.jpg', caption: 'Mudbrick village lanes', place: 'Dar Tantora' }
+                    { src: 'gallery/alula/hotel/dar2.jpg', caption: 'Dar Tantora interiors', place: 'Dar Tantora' },
+                    { src: 'gallery/alula/hotel/heritage2.jpg', caption: 'Mudbrick village lanes', place: 'Dar Tantora' },
+                    { src: 'gallery/alula/hotel/heritage1.jpg', caption: 'History & heritage', place: 'Dar Tantora' }
                 ]
             },
             'log-ulh': {
-                label: 'AlUla → Jeddah',
+                label: 'Return to Jeddah',
                 photos: [
-                    { src: 'gallery/alula/hegra-qasr.jpg', caption: 'Last look at Qasr al-Farid', place: 'AlUla' },
-                    { src: 'gallery/alula/elephant-sunset.jpg', caption: 'Elephant Rock farewell', place: 'AlUla' },
-                    { src: 'gallery/jeddah/albalad-houses.jpg', caption: 'Back toward Old Jeddah', place: 'Jeddah' },
-                    { src: 'gallery/jeddah/fountain-night.jpg', caption: 'Airport-night layover', place: 'JED' }
+                    { src: 'gallery/jeddah/pro/city-hero.jpg', caption: 'Back to the Red Sea', place: 'JED' },
+                    { src: 'gallery/jeddah/pro/green-roshan.jpg', caption: 'Old Jeddah · green rawashin', place: 'Al-Balad' },
+                    { src: 'gallery/jeddah/pro/albalad.jpg', caption: 'Historic Al-Balad', place: 'Old Jeddah' },
+                    { src: 'gallery/jeddah/pro/fountain-pro.jpg', caption: "King Fahd's Fountain", place: 'Corniche' }
                 ]
             },
             'log-home': {
                 label: 'Home to Boston',
                 photos: [
                     { src: 'gallery/home/boston.jpg', caption: 'Boston skyline return', place: 'BOS' },
-                    { src: 'gallery/bos/skyline-dusk.jpg', caption: 'Dusk over the Charles', place: 'Boston' },
-                    { src: 'gallery/auh/zayed.jpg', caption: 'Via Abu Dhabi', place: 'AUH' }
+                    { src: 'gallery/bos/skyline-dusk.jpg', caption: 'Dusk over the Charles', place: 'Boston' }
                 ]
             }
         };
+
+        // Jeddah inbound (AUH→JED) shares the Jeddah gallery — no separate Abu Dhabi stop
+        const GALLERY_ALIAS = { 'log-auh': 'log-nye' };
 
         let galleryStopId = 'log-bos';
         let galleryPhotoIdx = 0;
@@ -1271,7 +1254,12 @@
             });
         }
 
+        function resolveGalleryId(stopId) {
+            return GALLERY_ALIAS[stopId] || stopId;
+        }
+
         function showGallery(stopId, photoIdx = 0, openLb = false) {
+            stopId = resolveGalleryId(stopId);
             if (!GALLERIES[stopId]) return;
             galleryStopId = stopId;
             galleryPhotoIdx = photoIdx;
@@ -1308,6 +1296,7 @@
         }
 
         function openLightbox(stopId, photoIdx) {
+            stopId = resolveGalleryId(stopId);
             if (!GALLERIES[stopId]) return;
             galleryStopId = stopId;
             galleryPhotoIdx = photoIdx;
@@ -1443,7 +1432,8 @@
             if (!id) return;
             const logEl = document.getElementById(id);
             if (logEl) logEl.classList.add('arrived');
-            if (GALLERIES[id]) showGallery(id, 0);
+            const gid = resolveGalleryId(id);
+            if (GALLERIES[gid]) showGallery(gid, 0);
         }
 
         function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
